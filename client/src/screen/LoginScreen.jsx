@@ -96,6 +96,9 @@ const LoginScreen = () => {
   const handleRegister = () => {
     navigation.navigate("Signup");
   }
+  const handleReset = () => {
+    navigation.navigate("Recovery");
+  }
 
   return (
     <View style={styles.container}>
@@ -119,7 +122,7 @@ const LoginScreen = () => {
         <Fontisto name={"locked"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
         <TextInput style={styles.textInput} placeholder="Password" secureTextEntry />
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleReset}>
         <Text style={styles.forgotPasswordText}>forgot your password?</Text>
       </TouchableOpacity>
       <View style={styles.signInButtonContainer}>

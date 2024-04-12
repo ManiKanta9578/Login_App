@@ -147,7 +147,9 @@ const SignupScreen = () => {
         <Text style={styles.footerText}>Or create account using social media</Text>
       </View>
       <View style={styles.socialMediaContainer}>
-        <Image source={require("../assets/instagram.png")} style={styles.socialIcon} />
+        <TouchableOpacity onPress={() => "https://www.instagram.com/"}>
+          <Image source={require("../assets/instagram.png")} style={styles.socialIcon} />
+        </TouchableOpacity>
         <Image source={require("../assets/twitter.jpg")} style={styles.socialIcon} />
         <Image source={require("../assets/google.png")} style={styles.socialIcon} />
       </View>
