@@ -5,6 +5,53 @@ import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from "@react-navigation/native";
 
+
+const RecoveryScreen = () => {
+
+    const navigation = useNavigation();
+
+    const handleRecovery = () => {
+        navigation.navigate("Reset");
+    }
+    const handleResend = () => {
+        // navigation.navigate("Login");
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.topImageContainer}>
+                <Image
+                    source={require("../assets/topVector.png")}
+                    style={styles.topImage}
+                />
+            </View>
+            <View style={styles.helloContainer}>
+                <Text style={styles.helloText}>Recovery</Text>
+            </View>
+
+            <View style={styles.inputContainer}>
+                <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+                <TextInput style={styles.textInput} placeholder="OTP" secureTextEntry keyboardType="number-pad"/>
+            </View>
+            <TouchableOpacity onPress={handleResend} style={styles.resend}>
+                <Text style={styles.forgotPasswordText}>Can't get OTP? Resend</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.signInButtonContainer} onPress={handleRecovery}>
+                <Text style={styles.signIn}>Recovery</Text>
+                <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                    <AntDesign name={"arrowright"} size={24} color={"white"} />
+                </LinearGradient>
+            </TouchableOpacity>
+            <View style={styles.leftVectorContainer}>
+                <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
+            </View>
+        </View>
+    );
+};
+
+export default RecoveryScreen;
+
+
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#F5F5F5",
@@ -100,48 +147,3 @@ const styles = StyleSheet.create({
     },
    
 });
-
-const RecoveryScreen = () => {
-
-    const navigation = useNavigation();
-
-    const handleRecovery = () => {
-        navigation.navigate("Reset");
-    }
-    const handleResend = () => {
-        // navigation.navigate("Login");
-    }
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.topImageContainer}>
-                <Image
-                    source={require("../assets/topVector.png")}
-                    style={styles.topImage}
-                />
-            </View>
-            <View style={styles.helloContainer}>
-                <Text style={styles.helloText}>Recovery</Text>
-            </View>
-
-            <View style={styles.inputContainer}>
-                <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                <TextInput style={styles.textInput} placeholder="OTP" secureTextEntry keyboardType="number-pad"/>
-            </View>
-            <TouchableOpacity onPress={handleResend} style={styles.resend}>
-                <Text style={styles.forgotPasswordText}>Can't get OTP? Resend</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.signInButtonContainer} onPress={handleRecovery}>
-                <Text style={styles.signIn}>Recovery</Text>
-                <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-                    <AntDesign name={"arrowright"} size={24} color={"white"} />
-                </LinearGradient>
-            </TouchableOpacity>
-            <View style={styles.leftVectorContainer}>
-                <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
-            </View>
-        </View>
-    );
-};
-
-export default RecoveryScreen;

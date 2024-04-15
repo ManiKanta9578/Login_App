@@ -1,11 +1,19 @@
-import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { Image, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Fontisto from 'react-native-vector-icons/dist/Fontisto';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from "@react-navigation/native";
+
+import { useFormik } from "formik";
+import { registerValidate } from '../helper/validate';
+import convertToBase64 from '../helper/convert';
+import { registerUser } from '../helper/helper';
+import Toast from "react-native-toast-message";
+import LoadingPopup from "./LoadingPopup";
+
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +25,7 @@ const styles = StyleSheet.create({
   topImage: {
     width: "100%",
     height: 130,
+    zIndex: -1,
   },
   helloContainer: {},
   helloText: {
@@ -99,19 +108,74 @@ const styles = StyleSheet.create({
     height: 40,
     width: 40,
     marginRight: 20,
-  }
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  loadingContent: {
+    backgroundColor: "transparent",
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 });
 
 const SignupScreen = () => {
 
   const navigation = useNavigation();
+  const [file, setFile] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      email: "furious00712@gmail.com",
+      username: "Srikar",
+      password: "Srikar@123"
+    },
+    validate: registerValidate,
+    validateOnBlur: false,
+    validateOnChange: false,
+    onSubmit: async (values) => {
+      try {
+        setIsLoading(true);
+        values = await Object.assign(values, { profile: file || '' });
+        await registerUser(values);
+        Toast.show({
+          type: 'success',
+          text1: 'Register Successfully!',
+          text2: 'You have successfully registered. Welcome aboard!',
+          visibilityTime: 2000,
+        });
+        navigation.navigate("username");
+      } catch (error) {
+        Toast.show({
+          type: 'error',
+          text1: error,
+          visibilityTime: 2000,
+        });
+      } finally { setIsLoading(false) }
+    }
+  });
+
+  // formik doesnot support file upload so we need to creat this handler
+  const onUpload = async (e) => {
+    const base64 = await convertToBase64(e.target.files[0]);
+    setFile(base64);
+  }
 
   const handleLogin = () => {
-    navigation.navigate("Login");
+    console.log("Submitting form...");
+    formik.handleSubmit();
   }
 
   return (
     <View style={styles.container}>
+      {isLoading && <LoadingPopup />}
+      <Toast position='top' bottomOffset={20} />
       <View style={styles.topImageContainer}>
         <Image
           source={require("../assets/topVector.png")}
@@ -121,28 +185,59 @@ const SignupScreen = () => {
       <View style={styles.helloContainer}>
         <Text style={styles.helloText}>Create Account</Text>
       </View>
-      <View style={styles.inputContainer}>
-        <FontAwesome name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput style={styles.textInput} placeholder="Username" />
-      </View>
-      <View style={styles.inputContainer}>
-        <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput style={styles.textInput} placeholder="Password" secureTextEntry />
+      <View>
+        <Text style={styles.signInText}>Happy to join you</Text>
       </View>
       <View style={styles.inputContainer}>
         <MaterialCommunityIcons name={"email"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput style={styles.textInput} placeholder="Email" secureTextEntry />
+        {/* <TextInput {...formik.getFieldProps('email')} style={styles.textInput} placeholder="Email" secureTextEntry /> */}
+        <TextInput
+          value={formik.values.email}
+          onChangeText={formik.handleChange('email')}
+          onBlur={formik.handleBlur('email')}
+          style={styles.textInput}
+          placeholder="email"
+          id="email"
+          name="email"
+        />
       </View>
       <View style={styles.inputContainer}>
+        <FontAwesome name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+        {/* <TextInput {...formik.getFieldProps('username')} style={styles.textInput} placeholder="Username" /> */}
+        <TextInput
+          value={formik.values.username}
+          onChangeText={formik.handleChange('username')}
+          onBlur={formik.handleBlur('username')}
+          style={styles.textInput}
+          placeholder="Username"
+          id="username"
+          name="username"
+        />
+      </View>
+      <View style={styles.inputContainer}>
+        <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+        {/* <TextInput {...formik.getFieldProps('password')} style={styles.textInput} placeholder="Password" secureTextEntry /> */}
+        <TextInput
+          value={formik.values.password}
+          onChangeText={formik.handleChange('password')}
+          onBlur={formik.handleBlur('password')}
+          style={styles.textInput}
+          placeholder="password"
+          id="password"
+          name="password"
+        />
+      </View>
+      {/* <View style={styles.inputContainer}>
         <FontAwesome name={"mobile"} size={34} color={"#9A9A9A"} style={styles.inputIcon} />
         <TextInput style={styles.textInput} placeholder="Mobile" secureTextEntry />
-      </View>
+      </View> */}
       <TouchableOpacity style={styles.signInButtonContainer} onPress={handleLogin}>
         <Text style={styles.signIn}>Create</Text>
         <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
           <AntDesign name={"arrowright"} size={24} color={"white"} />
         </LinearGradient>
       </TouchableOpacity>
+      {/* {isLoading && <ActivityIndicator size="large" color="#0000ff" />} */}
       <View style={styles.footerContainer}>
         <Text style={styles.footerText}>Or create account using social media</Text>
       </View>

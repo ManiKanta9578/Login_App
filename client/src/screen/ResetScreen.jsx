@@ -106,7 +106,7 @@ const ResetScreen = () => {
     const navigation = useNavigation();
 
     const handleReset = () => {
-        navigation.navigate("Login");
+        navigation.navigate("username");
     }
 
     return (
