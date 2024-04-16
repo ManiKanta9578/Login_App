@@ -4,6 +4,13 @@ import Fontisto from 'react-native-vector-icons/dist/Fontisto';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from "@react-navigation/native";
+import { useFormik } from "formik";
+import { resetPasswordValidate } from "../helper/validate";
+import { resetPassword } from "../helper/helper";
+import LoadingPopup from "./LoadingPopup";
+import Toast from "react-native-toast-message";
+import { useAuthStore } from "../store/store";
+import useFetch from "../hooks/fetch.hook";
 
 const styles = StyleSheet.create({
     container: {
@@ -15,6 +22,7 @@ const styles = StyleSheet.create({
     topImage: {
         width: "100%",
         height: 130,
+        zIndex: -1,
     },
     helloContainer: {},
     helloText: {
@@ -98,19 +106,45 @@ const styles = StyleSheet.create({
         width: 40,
         marginRight: 20,
     },
-   
+
 });
 
 const ResetScreen = () => {
 
     const navigation = useNavigation();
 
+    const { username } = useAuthStore(state => state.auth);
+    const { isLoading, apiData, status, serverError } = useFetch('createResetSession');
+
+    const formik = useFormik({
+        initialValues: {
+            password: "Mani@1234",
+            confirmPassword: "Mani@1234"
+        },
+        validate: resetPasswordValidate,
+        validateOnBlur: false,
+        validateOnChange: false,
+        onSubmit: async (values) => {
+            try {
+                await resetPassword({ username, password: values.password });
+                Toast.show({ type: 'success', text1: 'Reset successfully...!', visibilityTime: 2000, });
+                navigation.navigate("password");
+            } catch (error) {
+                Toast.show({ type: 'error', text1: error || "Could not Reset!", visibilityTime: 2000, });
+            }
+        }
+    });
+
     const handleReset = () => {
-        navigation.navigate("username");
+        formik.handleSubmit();
     }
+
+    if (serverError) return Toast.show({ type: 'error', text1: serverError.message });
 
     return (
         <View style={styles.container}>
+            {isLoading && <LoadingPopup />}
+            <Toast position='top' bottomOffset={20} />
             <View style={styles.topImageContainer}>
                 <Image
                     source={require("../assets/topVector.png")}
@@ -123,11 +157,30 @@ const ResetScreen = () => {
 
             <View style={styles.inputContainer}>
                 <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                <TextInput style={styles.textInput} placeholder="Password" secureTextEntry />
+                {/* <TextInput style={styles.textInput} placeholder="Password" secureTextEntry /> */}
+                <TextInput
+                    value={formik.values.password}
+                    onChangeText={formik.handleChange('password')}
+                    onBlur={formik.handleBlur('password')}
+                    style={styles.textInput}
+                    placeholder="Password"
+                    id="password"
+                    name="password"
+                />
             </View>
             <View style={styles.inputContainer}>
                 <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                <TextInput style={styles.textInput} placeholder="Confirm Password" secureTextEntry/>
+                {/* <TextInput style={styles.textInput} placeholder="Confirm Password" secureTextEntry /> */}
+                <TextInput
+                    value={formik.values.confirmPassword}
+                    onChangeText={formik.handleChange('confirmPassword')}
+                    onBlur={formik.handleBlur('confirmPassword')}
+                    style={styles.textInput}
+                    placeholder="ConfirmPassword"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    secureTextEntry
+                />
             </View>
             <TouchableOpacity style={styles.signInButtonContainer} onPress={handleReset}>
                 <Text style={styles.signIn}>Reset</Text>

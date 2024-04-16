@@ -113,15 +113,10 @@ const Password = () => {
     onSubmit: async (values) => {
       try {
         await verifyPassword({ username, password: values.password });
-        Toast.show({
-          type: 'success',
-          text1: 'Login Successfully...!',
-          // text2: 'You have successfully registered. Welcome aboard!',
-          visibilityTime: 2000,
-        });
-        // navigation.navigate("username");
+        Toast.show({ type: 'success', text1: 'Login Successfully...!', text2: 'You have successfully registered. Welcome aboard!', visibilityTime: 2000, });
+        navigation.navigate("profile");
       } catch (error) {
-        Toast.show({ type: 'error', text1: error, visibilityTime: 2000, });
+        Toast.show({ type: 'error', text1: "Incorrect password.", visibilityTime: 2000, });
       }
     }
   });

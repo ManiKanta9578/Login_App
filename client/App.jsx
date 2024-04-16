@@ -8,6 +8,7 @@ import RecoveryScreen from "./src/screen/RecoveryScreen";
 import ResetScreen from "./src/screen/ResetScreen";
 import Username from "./src/screen/Username";
 import Password from "./src/screen/Password";
+import Profile from "./src/screen/Profile";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ const App = () => {
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Recovery" component={RecoveryScreen} />
         <Stack.Screen name="Reset" component={ResetScreen} />
+        <Stack.Screen name="profile" component={Profile} />
       </Stack.Navigator>
     </NavigationContainer>
   );
