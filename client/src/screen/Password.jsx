@@ -105,7 +105,7 @@ const Password = () => {
 
   const formik = useFormik({
     initialValues: {
-      password: "Srikar@123",
+      password: "Mani@123",
     },
     validate: passwordValidate,
     validateOnBlur: false,

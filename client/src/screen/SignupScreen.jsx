@@ -132,9 +132,9 @@ const SignupScreen = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "furious00712@gmail.com",
-      username: "Srikar",
-      password: "Srikar@123"
+      email: "mani.rider999cool@gmail.com",
+      username: "Manikanta",
+      password: "Mani@123"
     },
     validate: registerValidate,
     validateOnBlur: false,
