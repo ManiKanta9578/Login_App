@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
-import Entypo from 'react-native-vector-icons/dist/Entypo';
-import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useFormik } from 'formik';
 import { profileValidate } from '../helper/validate';
 import { updateUser } from '../helper/helper';
@@ -13,6 +9,10 @@ import useFetch from '../hooks/fetch.hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoadingPopup from './LoadingPopup';
 import LinearGradient from 'react-native-linear-gradient';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
 const Profile = () => {
     const navigation = useNavigation();
@@ -62,80 +62,87 @@ const Profile = () => {
     };
 
     return (
-
-        <View style={styles.container}>
-            {isLoading && <LoadingPopup />}
-            <Toast position='top' bottomOffset={20} />
-            <View style={styles.topImageContainer}>
-                <Image source={require("../assets/topVector.png")} style={styles.topImage} />
-            </View>
-            <View style={styles.helloContainer}>
-                <Text style={styles.helloText}>Profile</Text>
-            </View>
-            <View>
-                <View style={styles.inputContainer}>
-                    <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-                    <TextInput
-                        onChangeText={formik.handleChange('firstName')}
-                        value={formik.values.firstName}
-                        placeholder="First Name"
-                        style={styles.textInput}
-                    />
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        >
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={styles.container}>
+                    {isLoading && <LoadingPopup />}
+                    <Toast position='top' bottomOffset={20} />
+                    <View style={styles.topImageContainer}>
+                        <Image source={require("../assets/topVector.png")} style={styles.topImage} />
+                    </View>
+                    <View style={styles.helloContainer}>
+                        <Text style={styles.helloText}>Profile</Text>
+                    </View>
+                    <View>
+                        <View style={styles.inputContainer}>
+                            <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+                            <TextInput
+                                onChangeText={formik.handleChange('firstName')}
+                                value={formik.values.firstName}
+                                placeholder="First Name"
+                                style={styles.textInput}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+                            <TextInput
+                                onChangeText={formik.handleChange('lastName')}
+                                value={formik.values.lastName}
+                                placeholder="Last Name"
+                                style={styles.textInput}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <FontAwesome name={"mobile"} size={34} color={"#9A9A9A"} style={styles.inputIcon} />
+                            <TextInput
+                                onChangeText={formik.handleChange('mobile')}
+                                value={formik.values.mobile}
+                                placeholder="Mobile"
+                                style={styles.textInput}
+                                keyboardType='number-pad'
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <MaterialCommunityIcons name={"email"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+                            <TextInput
+                                onChangeText={formik.handleChange('email')}
+                                value={formik.values.email}
+                                placeholder="Email"
+                                style={styles.textInput}
+                            />
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Entypo name={"address"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+                            <TextInput
+                                onChangeText={formik.handleChange('address')}
+                                value={formik.values.address}
+                                placeholder="Address"
+                                style={styles.textInput}
+                            />
+                        </View>
+                        <TouchableOpacity style={styles.updateButtonContainer} onPress={formik.handleSubmit}>
+                            <Text style={styles.signIn}>Update</Text>
+                            <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                                <AntDesign name={"arrowright"} size={24} color={"white"} />
+                            </LinearGradient>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.logoutButtonContainer} onPress={userLogout}>
+                            <Text style={styles.logout}>Logout</Text>
+                            <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                                <AntDesign name={"arrowright"} size={24} color={"white"} />
+                            </LinearGradient>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.leftVectorContainer}>
+                        <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
+                    </View>
                 </View>
-                <View style={styles.inputContainer}>
-                    <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-                    <TextInput
-                        onChangeText={formik.handleChange('lastName')}
-                        value={formik.values.lastName}
-                        placeholder="Last Name"
-                        style={styles.textInput}
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <FontAwesome name={"mobile"} size={34} color={"#9A9A9A"} style={styles.inputIcon} />
-                    <TextInput
-                        onChangeText={formik.handleChange('mobile')}
-                        value={formik.values.mobile}
-                        placeholder="Mobile"
-                        style={styles.textInput}
-                        keyboardType='number-pad'
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <MaterialCommunityIcons name={"email"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                    <TextInput
-                        onChangeText={formik.handleChange('email')}
-                        value={formik.values.email}
-                        placeholder="Email"
-                        style={styles.textInput}
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Entypo name={"address"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-                    <TextInput
-                        onChangeText={formik.handleChange('address')}
-                        value={formik.values.address}
-                        placeholder="Address"
-                        style={styles.textInput}
-                    />
-                </View>
-                <TouchableOpacity style={styles.updateButtonContainer} onPress={formik.handleSubmit}>
-                    <Text style={styles.signIn}>Update</Text>
-                    <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-                        <AntDesign name={"arrowright"} size={24} color={"white"} />
-                    </LinearGradient>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.logoutButtonContainer} onPress={userLogout}>
-                    <Text style={styles.logout}>Logout</Text>
-                    <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-                        <AntDesign name={"arrowright"} size={24} color={"white"} />
-                    </LinearGradient>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.leftVectorContainer}>
-                <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
-            </View>
-        </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 

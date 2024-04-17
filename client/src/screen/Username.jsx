@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from "@react-navigation/native";
@@ -49,46 +49,54 @@ const Username = () => {
 
 
   return (
-    <View style={styles.container}>
-      {isLoading && <LoadingPopup />}
-      <Toast position='top' bottomOffset={20} />
-      <View style={styles.topImageContainer}>
-        <Image source={require("../assets/topVector.png")} style={styles.topImage} />
-      </View>
-      <View style={styles.helloContainer}>
-        <Text style={styles.helloText}>Hello</Text>
-      </View>
-      <View>
-        <Text style={styles.signInText}>Sign in to your account</Text>
-      </View>
-      <View>
-        <View style={styles.inputContainer}>
-          <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-          {/* <TextInput {...formik.getFieldProps('username')} style={styles.textInput} placeholder="Username" /> */}
-          <TextInput
-            value={formik.values.username}
-            onChangeText={formik.handleChange('username')}
-            onBlur={formik.handleBlur('username')}
-            style={styles.textInput}
-            placeholder="Username"
-            id="username"
-            name="username"
-          />
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          {isLoading && <LoadingPopup />}
+          <Toast position='top' bottomOffset={20} />
+          <View style={styles.topImageContainer}>
+            <Image source={require("../assets/topVector.png")} style={styles.topImage} />
+          </View>
+          <View style={styles.helloContainer}>
+            <Text style={styles.helloText}>Hello</Text>
+          </View>
+          <View>
+            <Text style={styles.signInText}>Sign in to your account</Text>
+          </View>
+          <View>
+            <View style={styles.inputContainer}>
+              <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+              {/* <TextInput {...formik.getFieldProps('username')} style={styles.textInput} placeholder="Username" /> */}
+              <TextInput
+                value={formik.values.username}
+                onChangeText={formik.handleChange('username')}
+                onBlur={formik.handleBlur('username')}
+                style={styles.textInput}
+                placeholder="Username"
+                id="username"
+                name="username"
+              />
+            </View>
+            <TouchableOpacity style={styles.signInButtonContainer} onPress={handleSubmit}>
+              <Text style={styles.signIn}>Let's Go</Text>
+              <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                <AntDesign name={"arrowright"} size={24} color={"white"} />
+              </LinearGradient>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleRegister}>
+              <Text style={styles.footerText}>Don't have an account?<Text style={{ textDecorationLine: "underline" }}>Create</Text></Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.leftVectorContainer}>
+            <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
+          </View>
         </View>
-        <TouchableOpacity style={styles.signInButtonContainer} onPress={handleSubmit}>
-          <Text style={styles.signIn}>Let's Go</Text>
-          <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-            <AntDesign name={"arrowright"} size={24} color={"white"} />
-          </LinearGradient>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleRegister}>
-          <Text style={styles.footerText}>Don't have an account?<Text style={{ textDecorationLine: "underline" }}>Create</Text></Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.leftVectorContainer}>
-        <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

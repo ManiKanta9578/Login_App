@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 import Fontisto from 'react-native-vector-icons/dist/Fontisto';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
@@ -142,56 +142,64 @@ const ResetScreen = () => {
     if (serverError) return Toast.show({ type: 'error', text1: serverError.message });
 
     return (
-        <View style={styles.container}>
-            {isLoading && <LoadingPopup />}
-            <Toast position='top' bottomOffset={20} />
-            <View style={styles.topImageContainer}>
-                <Image
-                    source={require("../assets/topVector.png")}
-                    style={styles.topImage}
-                />
-            </View>
-            <View style={styles.helloContainer}>
-                <Text style={styles.helloText}>Reset</Text>
-            </View>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        >
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={styles.container}>
+                    {isLoading && <LoadingPopup />}
+                    <Toast position='top' bottomOffset={20} />
+                    <View style={styles.topImageContainer}>
+                        <Image
+                            source={require("../assets/topVector.png")}
+                            style={styles.topImage}
+                        />
+                    </View>
+                    <View style={styles.helloContainer}>
+                        <Text style={styles.helloText}>Reset</Text>
+                    </View>
 
-            <View style={styles.inputContainer}>
-                <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                {/* <TextInput style={styles.textInput} placeholder="Password" secureTextEntry /> */}
-                <TextInput
-                    value={formik.values.password}
-                    onChangeText={formik.handleChange('password')}
-                    onBlur={formik.handleBlur('password')}
-                    style={styles.textInput}
-                    placeholder="Password"
-                    id="password"
-                    name="password"
-                />
-            </View>
-            <View style={styles.inputContainer}>
-                <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                {/* <TextInput style={styles.textInput} placeholder="Confirm Password" secureTextEntry /> */}
-                <TextInput
-                    value={formik.values.confirmPassword}
-                    onChangeText={formik.handleChange('confirmPassword')}
-                    onBlur={formik.handleBlur('confirmPassword')}
-                    style={styles.textInput}
-                    placeholder="ConfirmPassword"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    secureTextEntry
-                />
-            </View>
-            <TouchableOpacity style={styles.signInButtonContainer} onPress={handleReset}>
-                <Text style={styles.signIn}>Reset</Text>
-                <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-                    <AntDesign name={"arrowright"} size={24} color={"white"} />
-                </LinearGradient>
-            </TouchableOpacity>
-            <View style={styles.leftVectorContainer}>
-                <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
-            </View>
-        </View>
+                    <View style={styles.inputContainer}>
+                        <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+                        {/* <TextInput style={styles.textInput} placeholder="Password" secureTextEntry /> */}
+                        <TextInput
+                            value={formik.values.password}
+                            onChangeText={formik.handleChange('password')}
+                            onBlur={formik.handleBlur('password')}
+                            style={styles.textInput}
+                            placeholder="Password"
+                            id="password"
+                            name="password"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+                        {/* <TextInput style={styles.textInput} placeholder="Confirm Password" secureTextEntry /> */}
+                        <TextInput
+                            value={formik.values.confirmPassword}
+                            onChangeText={formik.handleChange('confirmPassword')}
+                            onBlur={formik.handleBlur('confirmPassword')}
+                            style={styles.textInput}
+                            placeholder="ConfirmPassword"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            secureTextEntry
+                        />
+                    </View>
+                    <TouchableOpacity style={styles.signInButtonContainer} onPress={handleReset}>
+                        <Text style={styles.signIn}>Reset</Text>
+                        <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                            <AntDesign name={"arrowright"} size={24} color={"white"} />
+                        </LinearGradient>
+                    </TouchableOpacity>
+                    <View style={styles.leftVectorContainer}>
+                        <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
+                    </View>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 

@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, ImageBackground, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React from "react";
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Fontisto from 'react-native-vector-icons/dist/Fontisto';
@@ -134,47 +134,55 @@ const Password = () => {
   }
 
   return (
-    <View style={styles.container}>
-      {isLoading && <LoadingPopup />}
-      <Toast position='top' bottomOffset={20} />
-      <View style={styles.topImageContainer}>
-        <Image
-          source={require("../assets/topVector.png")}
-          style={styles.topImage}
-        />
-      </View>
-      <View style={styles.helloContainer}>
-        <Text style={styles.helloText}>Hello {apiData?.firstName || username}</Text>
-      </View>
-      <View>
-        <Text style={styles.signInText}>Sign in to your account</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <Fontisto name={"locked"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-        <TextInput
-          value={formik.values.password}
-          onChangeText={formik.handleChange('password')}
-          onBlur={formik.handleBlur('password')}
-          style={styles.textInput}
-          placeholder="password"
-          id="password"
-          name="password"
-          secureTextEntry
-        />
-      </View>
-      <TouchableOpacity onPress={handleReset}>
-        <Text style={styles.forgotPasswordText}>forgot your password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.signInButtonContainer} onPress={handleSignIn}>
-        <Text style={styles.signIn}>Sign In</Text>
-        <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-          <AntDesign name={"arrowright"} size={24} color={"white"} />
-        </LinearGradient>
-      </TouchableOpacity>
-      <View style={styles.leftVectorContainer}>
-        <ImageBackground source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
-      </View>
-    </View>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          {isLoading && <LoadingPopup />}
+          <Toast position='top' bottomOffset={20} />
+          <View style={styles.topImageContainer}>
+            <Image
+              source={require("../assets/topVector.png")}
+              style={styles.topImage}
+            />
+          </View>
+          <View style={styles.helloContainer}>
+            <Text style={styles.helloText}>Hello {apiData?.firstName || username}</Text>
+          </View>
+          <View>
+            <Text style={styles.signInText}>Sign in to your account</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <Fontisto name={"locked"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+            <TextInput
+              value={formik.values.password}
+              onChangeText={formik.handleChange('password')}
+              onBlur={formik.handleBlur('password')}
+              style={styles.textInput}
+              placeholder="password"
+              id="password"
+              name="password"
+              secureTextEntry
+            />
+          </View>
+          <TouchableOpacity onPress={handleReset}>
+            <Text style={styles.forgotPasswordText}>forgot your password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.signInButtonContainer} onPress={handleSignIn}>
+            <Text style={styles.signIn}>Sign In</Text>
+            <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+              <AntDesign name={"arrowright"} size={24} color={"white"} />
+            </LinearGradient>
+          </TouchableOpacity>
+          <View style={styles.leftVectorContainer}>
+            <ImageBackground source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

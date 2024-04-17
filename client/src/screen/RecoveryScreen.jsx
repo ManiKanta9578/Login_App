@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import Fontisto from 'react-native-vector-icons/dist/Fontisto';
 import AntDesign from 'react-native-vector-icons/dist/AntDesign';
@@ -55,41 +55,49 @@ const RecoveryScreen = () => {
 
 
     return (
-        <View style={styles.container}>
-            {isLoading && <LoadingPopup />}
-            <Toast position='top' bottomOffset={20} />
-            <View style={styles.topImageContainer}>
-                <Image source={require("../assets/topVector.png")} style={styles.topImage} />
-            </View>
-            <View style={styles.helloContainer}>
-                <Text style={styles.helloText}>Recovery</Text>
-            </View>
-            <View>
-                <Text style={styles.signInText}>Enter OTP to recover password.</Text>
-            </View>
-            <View style={styles.inputContainer}>
-                <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="OTP"
-                    keyboardType="number-pad"
-                    onChangeText={text => setOTP(text)}
-                    value={OTP}
-                />
-            </View>
-            <TouchableOpacity onPress={resendOTP} style={styles.resend}>
-                <Text style={styles.forgotPasswordText}>Can't get OTP? Resend</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.signInButtonContainer} onPress={onSubmit}>
-                <Text style={styles.signIn}>Recovery</Text>
-                <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-                    <AntDesign name={"arrowright"} size={24} color={"white"} />
-                </LinearGradient>
-            </TouchableOpacity>
-            <View style={styles.leftVectorContainer}>
-                <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
-            </View>
-        </View>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+        >
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+                <View style={styles.container}>
+                    {isLoading && <LoadingPopup />}
+                    <Toast position='top' bottomOffset={20} />
+                    <View style={styles.topImageContainer}>
+                        <Image source={require("../assets/topVector.png")} style={styles.topImage} />
+                    </View>
+                    <View style={styles.helloContainer}>
+                        <Text style={styles.helloText}>Recovery</Text>
+                    </View>
+                    <View>
+                        <Text style={styles.signInText}>Enter OTP to recover password.</Text>
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+                        <TextInput
+                            style={styles.textInput}
+                            placeholder="OTP"
+                            keyboardType="number-pad"
+                            onChangeText={text => setOTP(text)}
+                            value={OTP}
+                        />
+                    </View>
+                    <TouchableOpacity onPress={resendOTP} style={styles.resend}>
+                        <Text style={styles.forgotPasswordText}>Can't get OTP? Resend</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.signInButtonContainer} onPress={onSubmit}>
+                        <Text style={styles.signIn}>Recovery</Text>
+                        <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                            <AntDesign name={"arrowright"} size={24} color={"white"} />
+                        </LinearGradient>
+                    </TouchableOpacity>
+                    <View style={styles.leftVectorContainer}>
+                        <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
+                    </View>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 

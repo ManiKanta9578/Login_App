@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, ScrollView, StyleSheet, Text, TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import Fontisto from 'react-native-vector-icons/dist/Fontisto';
@@ -173,85 +173,93 @@ const SignupScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
-      {isLoading && <LoadingPopup />}
-      <Toast position='top' bottomOffset={20} />
-      <View style={styles.topImageContainer}>
-        <Image
-          source={require("../assets/topVector.png")}
-          style={styles.topImage}
-        />
-      </View>
-      <View style={styles.helloContainer}>
-        <Text style={styles.helloText}>Create Account</Text>
-      </View>
-      <View>
-        <Text style={styles.signInText}>Happy to join you</Text>
-      </View>
-      <View style={styles.inputContainer}>
-        <MaterialCommunityIcons name={"email"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-        {/* <TextInput {...formik.getFieldProps('email')} style={styles.textInput} placeholder="Email" secureTextEntry /> */}
-        <TextInput
-          value={formik.values.email}
-          onChangeText={formik.handleChange('email')}
-          onBlur={formik.handleBlur('email')}
-          style={styles.textInput}
-          placeholder="email"
-          id="email"
-          name="email"
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <FontAwesome name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
-        {/* <TextInput {...formik.getFieldProps('username')} style={styles.textInput} placeholder="Username" /> */}
-        <TextInput
-          value={formik.values.username}
-          onChangeText={formik.handleChange('username')}
-          onBlur={formik.handleBlur('username')}
-          style={styles.textInput}
-          placeholder="Username"
-          id="username"
-          name="username"
-        />
-      </View>
-      <View style={styles.inputContainer}>
-        <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
-        {/* <TextInput {...formik.getFieldProps('password')} style={styles.textInput} placeholder="Password" secureTextEntry /> */}
-        <TextInput
-          value={formik.values.password}
-          onChangeText={formik.handleChange('password')}
-          onBlur={formik.handleBlur('password')}
-          style={styles.textInput}
-          placeholder="password"
-          id="password"
-          name="password"
-        />
-      </View>
-      {/* <View style={styles.inputContainer}>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
+          {isLoading && <LoadingPopup />}
+          <Toast position='top' bottomOffset={20} />
+          <View style={styles.topImageContainer}>
+            <Image
+              source={require("../assets/topVector.png")}
+              style={styles.topImage}
+            />
+          </View>
+          <View style={styles.helloContainer}>
+            <Text style={styles.helloText}>Create Account</Text>
+          </View>
+          <View>
+            <Text style={styles.signInText}>Happy to join you</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <MaterialCommunityIcons name={"email"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+            {/* <TextInput {...formik.getFieldProps('email')} style={styles.textInput} placeholder="Email" secureTextEntry /> */}
+            <TextInput
+              value={formik.values.email}
+              onChangeText={formik.handleChange('email')}
+              onBlur={formik.handleBlur('email')}
+              style={styles.textInput}
+              placeholder="email"
+              id="email"
+              name="email"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <FontAwesome name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+            {/* <TextInput {...formik.getFieldProps('username')} style={styles.textInput} placeholder="Username" /> */}
+            <TextInput
+              value={formik.values.username}
+              onChangeText={formik.handleChange('username')}
+              onBlur={formik.handleBlur('username')}
+              style={styles.textInput}
+              placeholder="Username"
+              id="username"
+              name="username"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Fontisto name={"locked"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+            {/* <TextInput {...formik.getFieldProps('password')} style={styles.textInput} placeholder="Password" secureTextEntry /> */}
+            <TextInput
+              value={formik.values.password}
+              onChangeText={formik.handleChange('password')}
+              onBlur={formik.handleBlur('password')}
+              style={styles.textInput}
+              placeholder="password"
+              id="password"
+              name="password"
+            />
+          </View>
+          {/* <View style={styles.inputContainer}>
         <FontAwesome name={"mobile"} size={34} color={"#9A9A9A"} style={styles.inputIcon} />
         <TextInput style={styles.textInput} placeholder="Mobile" secureTextEntry />
       </View> */}
-      <TouchableOpacity style={styles.signInButtonContainer} onPress={handleLogin}>
-        <Text style={styles.signIn}>Create</Text>
-        <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
-          <AntDesign name={"arrowright"} size={24} color={"white"} />
-        </LinearGradient>
-      </TouchableOpacity>
-      {/* {isLoading && <ActivityIndicator size="large" color="#0000ff" />} */}
-      <View style={styles.footerContainer}>
-        <Text style={styles.footerText}>Or create account using social media</Text>
-      </View>
-      <View style={styles.socialMediaContainer}>
-        <TouchableOpacity onPress={() => "https://www.instagram.com/"}>
-          <Image source={require("../assets/instagram.png")} style={styles.socialIcon} />
-        </TouchableOpacity>
-        <Image source={require("../assets/twitter.jpg")} style={styles.socialIcon} />
-        <Image source={require("../assets/google.png")} style={styles.socialIcon} />
-      </View>
-      <View style={styles.leftVectorContainer}>
-        <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
-      </View>
-    </View>
+          <TouchableOpacity style={styles.signInButtonContainer} onPress={handleLogin}>
+            <Text style={styles.signIn}>Create</Text>
+            <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+              <AntDesign name={"arrowright"} size={24} color={"white"} />
+            </LinearGradient>
+          </TouchableOpacity>
+          {/* {isLoading && <ActivityIndicator size="large" color="#0000ff" />} */}
+          <View style={styles.footerContainer}>
+            <Text style={styles.footerText}>Or create account using social media</Text>
+          </View>
+          <View style={styles.socialMediaContainer}>
+            <TouchableOpacity onPress={() => "https://www.instagram.com/"}>
+              <Image source={require("../assets/instagram.png")} style={styles.socialIcon} />
+            </TouchableOpacity>
+            <Image source={require("../assets/twitter.jpg")} style={styles.socialIcon} />
+            <Image source={require("../assets/google.png")} style={styles.socialIcon} />
+          </View>
+          <View style={styles.leftVectorContainer}>
+            <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
