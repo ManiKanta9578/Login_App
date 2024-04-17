@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
+import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import { View, Text, TextInput, TouchableOpacity, Image, Alert, StyleSheet } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
 import { useFormik } from 'formik';
 import { profileValidate } from '../helper/validate';
 import { updateUser } from '../helper/helper';
@@ -8,17 +11,19 @@ import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 import useFetch from '../hooks/fetch.hook';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingPopup from './LoadingPopup';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Profile = () => {
     const navigation = useNavigation();
-    const [profileImage, setProfileImage] = useState(apiData?.profile);
     const { isLoading, apiData, serverError } = useFetch();
+    console.log(apiData, "apiData");
 
     const formik = useFormik({
         initialValues: {
             firstName: apiData?.firstName,
             lastName: apiData?.lastName,
-            mobile: apiData?.mobile,
+            mobile: String(apiData?.mobile) || '',
             email: apiData?.email,
             address: apiData?.address,
         },
@@ -27,108 +32,108 @@ const Profile = () => {
         validateOnBlur: false,
         validateOnChange: false,
         onSubmit: async (values) => {
-            const updateData = {
-                ...values,
-                profile: profileImage || apiData?.profile || ''
-            };
+            const updateData = { ...values };
             try {
                 await updateUser(updateData);
-                showToast('success', 'Updated successfully!');
+                Toast.show({ type: 'success', text1: 'Updated successfully!' });
             } catch (error) {
                 showToast('error', 'Could not update.');
+                Toast.show({ type: 'error', text1: 'Could not update.' });
             }
         },
     });
 
-    const showToast = (type, message) => {
-        Toast.show({
-            type: type,
-            text1: message,
-        });
-    };
-
-    const pickImage = () => {
-        const options = {
-            title: 'Select Profile Picture',
-            storageOptions: {
-                skipBackup: true,
-                path: 'images',
-            },
-        };
-
-        ImagePicker.showImagePicker(options, (response) => {
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('ImagePicker Error: ', response.error);
-            } else {
-                setProfileImage(response.uri);
-            }
-        });
-    };
+    useEffect(() => {
+        // Check if apiData.mobile is undefined or null, if yes, set formik mobile field to an empty string
+        if (apiData && (apiData.mobile === undefined || apiData.mobile === null)) {
+            formik.setFieldValue('mobile', '');
+        }
+    }, [apiData]);
 
     const userLogout = async () => {
         try {
-          // Remove the token from AsyncStorage
-          await AsyncStorage.removeItem('token');
-          // Navigate to the desired screen (e.g., login screen)
-          navigation.navigate('username');
+            // Remove the token from AsyncStorage
+            await AsyncStorage.removeItem('token');
+            // Navigate to the desired screen (e.g., login screen)
+            navigation.navigate('username');
         } catch (error) {
-          console.error('Error logging out:', error);
+            console.error('Error logging out:', error);
         }
-      };
+    };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.card}>
-                <Text style={styles.title}>Profile</Text>
-                <TouchableOpacity onPress={pickImage}>
-                    {profileImage ? (
-                        <Image source={{ uri: profileImage }} style={styles.profileImage} />
-                    ) : (
-                        <View style={styles.placeholderImage}>
-                            <Text>No Image</Text>
-                        </View>
-                    )}
-                </TouchableOpacity>
 
-                <TextInput
-                    onChangeText={formik.handleChange('firstName')}
-                    value={formik.values.firstName}
-                    placeholder="First Name"
-                    style={styles.input}
-                />
-                <TextInput
-                    onChangeText={formik.handleChange('lastName')}
-                    value={formik.values.lastName}
-                    placeholder="Last Name"
-                    style={styles.input}
-                />
-                <TextInput
-                    onChangeText={formik.handleChange('mobile')}
-                    value={formik.values.mobile}
-                    placeholder="Mobile"
-                    style={styles.input}
-                />
-                <TextInput
-                    onChangeText={formik.handleChange('email')}
-                    value={formik.values.email}
-                    placeholder="Email"
-                    style={styles.input}
-                />
-                <TextInput
-                    onChangeText={formik.handleChange('address')}
-                    value={formik.values.address}
-                    placeholder="Address"
-                    style={styles.input}
-                />
-                {/* Similar text inputs for lastName, mobile, email, address */}
-                <TouchableOpacity onPress={formik.handleSubmit} style={styles.button}>
-                    <Text style={styles.buttonText}>Update</Text>
+        <View style={styles.container}>
+            {isLoading && <LoadingPopup />}
+            <Toast position='top' bottomOffset={20} />
+            <View style={styles.topImageContainer}>
+                <Image source={require("../assets/topVector.png")} style={styles.topImage} />
+            </View>
+            <View style={styles.helloContainer}>
+                <Text style={styles.helloText}>Profile</Text>
+            </View>
+            <View>
+                <View style={styles.inputContainer}>
+                    <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+                    <TextInput
+                        onChangeText={formik.handleChange('firstName')}
+                        value={formik.values.firstName}
+                        placeholder="First Name"
+                        style={styles.textInput}
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <AntDesign name={"user"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+                    <TextInput
+                        onChangeText={formik.handleChange('lastName')}
+                        value={formik.values.lastName}
+                        placeholder="Last Name"
+                        style={styles.textInput}
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <FontAwesome name={"mobile"} size={34} color={"#9A9A9A"} style={styles.inputIcon} />
+                    <TextInput
+                        onChangeText={formik.handleChange('mobile')}
+                        value={formik.values.mobile}
+                        placeholder="Mobile"
+                        style={styles.textInput}
+                        keyboardType='number-pad'
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <MaterialCommunityIcons name={"email"} size={22} color={"#9A9A9A"} style={styles.inputIcon} />
+                    <TextInput
+                        onChangeText={formik.handleChange('email')}
+                        value={formik.values.email}
+                        placeholder="Email"
+                        style={styles.textInput}
+                    />
+                </View>
+                <View style={styles.inputContainer}>
+                    <Entypo name={"address"} size={24} color={"#9A9A9A"} style={styles.inputIcon} />
+                    <TextInput
+                        onChangeText={formik.handleChange('address')}
+                        value={formik.values.address}
+                        placeholder="Address"
+                        style={styles.textInput}
+                    />
+                </View>
+                <TouchableOpacity style={styles.updateButtonContainer} onPress={formik.handleSubmit}>
+                    <Text style={styles.signIn}>Update</Text>
+                    <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                        <AntDesign name={"arrowright"} size={24} color={"white"} />
+                    </LinearGradient>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={userLogout} style={styles.logout}>
-                    <Text style={styles.logoutText}>Logout</Text>
+                <TouchableOpacity style={styles.logoutButtonContainer} onPress={userLogout}>
+                    <Text style={styles.logout}>Logout</Text>
+                    <LinearGradient colors={['#F97794', '#623AA2']} style={styles.linearGradient}>
+                        <AntDesign name={"arrowright"} size={24} color={"white"} />
+                    </LinearGradient>
                 </TouchableOpacity>
+            </View>
+            <View style={styles.leftVectorContainer}>
+                <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
             </View>
         </View>
     );
@@ -136,58 +141,98 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: "#F5F5F5",
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        position: "relative"
     },
-    card: {
-        backgroundColor: 'rgba(255,255,255,0.9)',
+    topImageContainer: {},
+    topImage: {
+        width: "100%",
+        height: 130,
+        zIndex: -1,
+    },
+    helloContainer: {},
+    helloText: {
+        textAlign: "center",
+        fontSize: 70,
+        fontWeight: "500",
+        color: "#262626",
+    },
+    signInText: {
+        textAlign: "center",
+        fontSize: 18,
+        color: "#262626",
+        marginBottom: 30,
+    },
+    inputContainer: {
+        backgroundColor: "#FFFFFF",
+        flexDirection: 'row',
         borderRadius: 20,
-        padding: 20,
-        width: '90%',
+        marginHorizontal: 40,
+        elevation: 10,
+        marginVertical: 15,
+        alignItems: "center",
+        height: 50,
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
+    inputIcon: {
+        marginLeft: 15,
+        marginRight: 5,
     },
-    profileImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        marginBottom: 10,
+    textInput: {
+        flex: 1,
     },
-    placeholderImage: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        backgroundColor: 'lightgray',
-        justifyContent: 'center',
-        alignItems: 'center',
+    forgotPasswordText: {
+        color: "#BEBEBE",
+        textAlign: "right",
+        width: "90%",
+        fontSize: 15,
     },
-    input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        borderRadius: 5,
-        padding: 10,
-        marginVertical: 5,
+    updateButtonContainer: {
+        flexDirection: "row",
+        marginTop: 40,
+        width: "90%",
+        justifyContent: 'flex-end',
     },
-    button: {
-        backgroundColor: 'green',
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 10,
+    logoutButtonContainer: {
+        flexDirection: "row",
+        marginTop: 30,
+        width: "90%",
+        justifyContent: 'flex-end',
     },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
+    signIn: {
+        color: "#262626",
+        fontSize: 25,
+        fontWeight: "bold",
     },
     logout: {
-        marginTop: 10,
+        color: "red",
+        fontSize: 25,
+        fontWeight: "bold",
     },
-    logoutText: {
-        color: 'red',
+    linearGradient: {
+        height: 34,
+        width: 56,
+        borderRadius: 17,
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 10,
     },
+    footerText: {
+        color: "#262626",
+        textAlign: "center",
+        fontSize: 18,
+        marginTop: 120,
+    },
+    leftVectorContainer: {
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+    },
+    leftVectorImage: {
+        height: 450,
+        width: 250,
+        zIndex: -1,
+    }
 });
 
 export default Profile;

@@ -10,6 +10,17 @@ import Username from "./src/screen/Username";
 import Password from "./src/screen/Password";
 import Profile from "./src/screen/Profile";
 
+import {decode, encode} from 'base-64';
+
+if (!global.btoa) {
+  global.btoa = encode;
+}
+
+if (!global.atob) {
+  global.atob = decode;
+}
+
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {

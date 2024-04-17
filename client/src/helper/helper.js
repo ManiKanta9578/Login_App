@@ -1,7 +1,8 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode'
 import { API_URL } from '../env';
+
 
 axios.defaults.baseURL = API_URL;
 
@@ -12,9 +13,14 @@ export const getUsername = async () => {
     try {
         let token = await AsyncStorage.getItem('token');
         if (!token) return Promise.reject('Cannot find token.');
+        console.log('Retrieved token:', token);
+        
         let decode = jwtDecode(token);
+        console.log('Decoded token:', decode);
+        
         return decode;
     } catch (error) {
+        console.error('Error in getUsername:', error)
         return Promise.reject(error);
     }
 }
