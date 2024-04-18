@@ -25,7 +25,8 @@ app.disable('x-powered-by');
 const PORT = process.env.PORT;
 
 /** HTTP Get Request */
-app.get('/', (req, res) => res.status(201).json("Home Get Request"));
+// app.get('/', (req, res) => res.status(201).json("Home Get Request"));
+app.get("/", (req, res) => res.send("Home Get Request"));
 
 /** API routes */
 app.use('/api', router);
