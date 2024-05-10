@@ -18,7 +18,7 @@ const Username = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: "Manikanta",
+      username: "",
     },
     validate: usernameValidate,
     validateOnBlur: false,
@@ -91,9 +91,9 @@ const Username = () => {
               <Text style={styles.footerText}>Don't have an account?<Text style={{ textDecorationLine: "underline" }}>Create</Text></Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.leftVectorContainer}>
+          {/* <View style={styles.leftVectorContainer}>
             <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

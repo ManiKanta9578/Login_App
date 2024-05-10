@@ -132,9 +132,9 @@ const SignupScreen = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: "mani.rider999cool@gmail.com",
-      username: "Manikanta",
-      password: "Mani@123"
+      email: "",
+      username: "",
+      password: ""
     },
     validate: registerValidate,
     validateOnBlur: false,
@@ -254,9 +254,9 @@ const SignupScreen = () => {
             <Image source={require("../assets/twitter.jpg")} style={styles.socialIcon} />
             <Image source={require("../assets/google.png")} style={styles.socialIcon} />
           </View>
-          <View style={styles.leftVectorContainer}>
+          {/* <View style={styles.leftVectorContainer}>
             <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

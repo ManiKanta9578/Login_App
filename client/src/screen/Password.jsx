@@ -105,7 +105,7 @@ const Password = () => {
 
   const formik = useFormik({
     initialValues: {
-      password: "Mani@123",
+      password: "",
     },
     validate: passwordValidate,
     validateOnBlur: false,
@@ -177,9 +177,9 @@ const Password = () => {
               <AntDesign name={"arrowright"} size={24} color={"white"} />
             </LinearGradient>
           </TouchableOpacity>
-          <View style={styles.leftVectorContainer}>
+          {/* <View style={styles.leftVectorContainer}>
             <ImageBackground source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

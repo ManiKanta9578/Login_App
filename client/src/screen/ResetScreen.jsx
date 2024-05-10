@@ -118,8 +118,8 @@ const ResetScreen = () => {
 
     const formik = useFormik({
         initialValues: {
-            password: "Mani@1234",
-            confirmPassword: "Mani@1234"
+            password: "",
+            confirmPassword: ""
         },
         validate: resetPasswordValidate,
         validateOnBlur: false,
@@ -194,9 +194,9 @@ const ResetScreen = () => {
                             <AntDesign name={"arrowright"} size={24} color={"white"} />
                         </LinearGradient>
                     </TouchableOpacity>
-                    <View style={styles.leftVectorContainer}>
+                    {/* <View style={styles.leftVectorContainer}>
                         <Image source={require("../assets/leftVectorSignup.png")} style={styles.leftVectorImage} />
-                    </View>
+                    </View> */}
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>

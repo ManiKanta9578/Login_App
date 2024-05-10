@@ -137,9 +137,9 @@ const Profile = () => {
                             </LinearGradient>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.leftVectorContainer}>
+                    {/* <View style={styles.leftVectorContainer}>
                         <Image source={require("../assets/leftVector.png")} style={styles.leftVectorImage} />
-                    </View>
+                    </View> */}
                 </View>
             </ScrollView>
         </KeyboardAvoidingView>
